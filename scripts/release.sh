@@ -26,6 +26,12 @@ CASK="$TAP/Casks/tokenz.rb"
 
 test -d "$APP" || { print -u2 "no $APP; export a notarised build from the Xcode Organizer into dist/"; exit 1; }
 test -d "$TAP/Casks" || { print -u2 "no tap checkout at $TAP (set TOKENZ_TAP)"; exit 1; }
+# The cask goes onto an up-to-date main. A submodule checkout of the tap is
+# detached at whatever commit its parent pinned, where a commit cannot be
+# pushed and may sit behind casks other apps have published since.
+git -C "$TAP" fetch -q origin
+[[ "$(git -C "$TAP" symbolic-ref -q --short HEAD || true)" == main ]] || { print -u2 "$TAP is not on main; run: git -C $TAP switch main && git -C $TAP pull --ff-only"; exit 1; }
+git -C "$TAP" merge-base --is-ancestor origin/main HEAD || { print -u2 "$TAP is behind origin/main; run: git -C $TAP pull --ff-only"; exit 1; }
 built="$(defaults read "${APP:A}/Contents/Info.plist" CFBundleShortVersionString)"
 [[ $built == "$VERSION" ]] || { print -u2 "$APP is $built, project.yml says $VERSION; archive again"; exit 1; }
 grep -q "^## $VERSION " CHANGELOG.md || { print -u2 "CHANGELOG.md has no '## $VERSION ' section"; exit 1; }
@@ -57,5 +63,5 @@ NOTES="$(awk -v v="## $VERSION " 'index($0, v) == 1 {on = 1; next} /^## / {on = 
 print "== creating release $TAG on $REPO"
 gh release create "$TAG" "$ZIP" --repo "$REPO" --title "Tokenz $VERSION" --notes "$NOTES"
 print "== committing and pushing the cask"
-(cd "$TAP" && git add Casks/tokenz.rb && git commit -m "tokenz $VERSION" && git push)
+(cd "$TAP" && git add Casks/tokenz.rb && git commit -m "tokenz $VERSION" && git push origin main)
 print "released: brew install pardel/tap/tokenz   (brew upgrade tokenz for existing installs)"
