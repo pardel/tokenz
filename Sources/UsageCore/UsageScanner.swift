@@ -12,10 +12,7 @@ public final class UsageScanner: @unchecked Sendable {
         defer { lock.unlock() }
         let calendar = Calendar.current
         let cutoff = UsagePeriod.thirtyDays.start(at: now, calendar: calendar)
-        if quotaPath != claudeQuotaPath { claudeQuota = nil; quotaPath = claudeQuotaPath }
-        if let path = claudeQuotaPath, let report = ClaudeQuotaReader.read(from: path) {
-            if report.date >= (claudeQuota?.date ?? .distantPast) { claudeQuota = report }
-        }
+        updateClaudeQuota(path: claudeQuotaPath, now: now)
         var activePaths = Set<String>()
         let providers = Provider.allCases.map { provider -> ProviderUsage in
             let path = paths[provider] ?? ""
@@ -77,6 +74,21 @@ public final class UsageScanner: @unchecked Sendable {
         }
         cache = cache.filter { activePaths.contains($0.key) }
         return UsageSnapshot(providers: providers, refreshedAt: now)
+    }
+
+    /// Re-reads only the Claude feed, which changes with every status line, between full scans.
+    public func claudeQuota(path: String, now: Date = Date()) -> QuotaSnapshot? {
+        lock.lock()
+        defer { lock.unlock() }
+        updateClaudeQuota(path: path, now: now)
+        return claudeQuota
+    }
+
+    /// Call with the lock held.
+    private func updateClaudeQuota(path: String?, now: Date) {
+        if quotaPath != path { claudeQuota = nil; quotaPath = path }
+        guard let path, let report = ClaudeQuotaReader.read(from: path) else { return }
+        claudeQuota = claudeQuota?.merging(report, at: now) ?? report
     }
 
     private func read(_ url: URL, provider: Provider, state: inout FileState, cutoff: Date) throws {

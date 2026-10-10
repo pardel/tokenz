@@ -56,6 +56,8 @@ The script saves only the percentages and reset times to `~/.claude/tokenz-rate-
 
 Claude Code sends `rate_limits` only on Pro and Max plans, and only after a session's first response. Until then the Claude reading shows as unavailable, never as zero.
 
+Every open session runs the status line, each with the limits from its own last response, so a session left idle can pass on older figures. Usage within a window only grows, so the script keeps the higher figure for the same window and never lets a window that has ended replace one that hasn't. An idle session's own status line can therefore show less than Tokenz until that session's next response.
+
 <p align="center"><img src="docs/assets/panel-waiting.png" width="390" alt="The Tokenz panel after setup, before the first reading: the Claude Code card says Waiting for Claude Code's next response. Plan percentages come on Pro and Max plans."></p>
 
 ## The menu bar

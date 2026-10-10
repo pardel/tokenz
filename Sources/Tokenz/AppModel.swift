@@ -45,6 +45,8 @@ final class AppModel: ObservableObject {
     private let queue = DispatchQueue(label: "dev.pardel.tokenz.scanner", qos: .utility)
     private let scanner = UsageScanner()
     private var timer: Timer?
+    private var feedTimer: Timer?
+    private var feedModified: Date?
 
     init() {
         paths = Preferences.paths
@@ -57,8 +59,31 @@ final class AppModel: ObservableObject {
         timer = Timer.scheduledTimer(withTimeInterval: 300, repeats: true) { [weak self] _ in
             Task { @MainActor in self?.refresh() }
         }
+        // The Claude feed is one small file that every status line rewrites; the logs wait for the full scan.
+        feedTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { [weak self] _ in
+            Task { @MainActor in self?.refreshClaudeQuota() }
+        }
+        feedTimer?.tolerance = 5
         NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.didWakeNotification,
             object: nil, queue: .main) { [weak self] _ in Task { @MainActor in self?.refresh() } }
+    }
+    /// Re-reads only the Claude feed, when it has changed since the last look.
+    func refreshClaudeQuota() {
+        let path = claudeQuotaPath
+        let modified = (try? URL(fileURLWithPath: NSString(string: path).expandingTildeInPath)
+            .resourceValues(forKeys: [.contentModificationDateKey]))?.contentModificationDate
+        guard !refreshing, snapshot != nil, modified != feedModified else { return }
+        feedModified = modified
+        queue.async { [scanner, weak self] in
+            let quota = scanner.claudeQuota(path: path)
+            DispatchQueue.main.async { [weak self] in
+                guard let self, self.claudeQuotaPath == path, var snapshot = self.snapshot,
+                      let index = snapshot.providers.firstIndex(where: { $0.provider == .claude }) else { return }
+                snapshot.providers[index].quota = quota
+                self.snapshot = snapshot
+                self.onUpdate?()
+            }
+        }
     }
     func refresh() {
         guard !refreshing else { return }

@@ -47,6 +47,13 @@ public struct QuotaWindow: Identifiable, Sendable {
         return "\(minutes)-minute limit"
     }
     public func isExpired(at date: Date) -> Bool { resetsAt.map { $0 <= date } ?? false }
+    /// False for a reading of a window that has ended while `held`'s has not, or one no higher than
+    /// `held` for the same window: usage within a window only grows. Otherwise the newer report wins.
+    public func supersedes(_ held: QuotaWindow, at now: Date) -> Bool {
+        if isExpired(at: now) && !held.isExpired(at: now) { return false }
+        if let resetsAt, resetsAt == held.resetsAt { return usedPercent > held.usedPercent }
+        return true
+    }
 }
 
 public struct QuotaSnapshot: Sendable {
@@ -55,6 +62,22 @@ public struct QuotaSnapshot: Sendable {
     /// Never substitute another period: each menu bar indicator has one meaning.
     public func activeWindow(minutes: Int, at now: Date) -> QuotaWindow? {
         windows.first { $0.minutes == minutes && !$0.isExpired(at: now) }
+    }
+    /// Every Claude Code session writes the same feed with the limits from its own last response,
+    /// so a session left idle can save older figures. Keeps each window the report does not
+    /// supersede; the date moves only when a window changes.
+    public func merging(_ report: QuotaSnapshot, at now: Date) -> QuotaSnapshot {
+        var merged = self
+        for window in report.windows {
+            if let index = merged.windows.firstIndex(where: { $0.id == window.id }) {
+                guard window.supersedes(merged.windows[index], at: now) else { continue }
+                merged.windows[index] = window
+            } else {
+                merged.windows.append(window)
+            }
+            merged.date = max(merged.date, report.date)
+        }
+        return merged
     }
 }
 

@@ -161,4 +161,42 @@ final class UsageCoreTests: XCTestCase {
         XCTAssertNil(report.activeWindow(minutes: 300, at: now))
         XCTAssertEqual(report.activeWindow(minutes: 10080, at: now)?.usedPercent, 64)
     }
+
+    func testIdleSessionsCannotSetTheClaudeReadingBack() throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let feed = root.appendingPathComponent("tokenz-rate-limits.json")
+        let scanner = UsageScanner()
+        func reading(_ used: Double, resetsIn seconds: TimeInterval) throws -> Double? {
+            try line(["rate_limits": ["five_hour": ["used_percentage": used,
+                                                   "resets_at": now.addingTimeInterval(seconds).timeIntervalSince1970]]]).write(to: feed)
+            return scanner.claudeQuota(path: feed.path, now: now)?.activeWindow(minutes: 300, at: now)?.usedPercent
+        }
+        XCTAssertEqual(try reading(52, resetsIn: 3600), 52)
+        XCTAssertEqual(try reading(27, resetsIn: 3600), 52, "an idle session's older figure for the same window")
+        XCTAssertEqual(try reading(90, resetsIn: -60), 52, "a window that has ended")
+        XCTAssertEqual(try reading(53, resetsIn: 3600), 53)
+        XCTAssertEqual(try reading(4, resetsIn: 1800), 4, "another live window: another account, or limits reset early")
+        XCTAssertEqual(scanner.scan(paths: [:], claudeQuotaPath: feed.path, now: now).providers[0]
+            .quota?.activeWindow(minutes: 300, at: now)?.usedPercent, 4)
+    }
+
+    func testMergingKeepsUnreportedWindowsAndMovesTheDateOnlyOnChange() {
+        let reset = now.addingTimeInterval(3600)
+        let held = QuotaSnapshot(date: now, windows: [
+            QuotaWindow(id: "five_hour", usedPercent: 52, minutes: 300, resetsAt: reset),
+            QuotaWindow(id: "seven_day", usedPercent: 37, minutes: 10080, resetsAt: reset.addingTimeInterval(86400))
+        ])
+        func report(_ used: Double, after seconds: TimeInterval) -> QuotaSnapshot {
+            QuotaSnapshot(date: now.addingTimeInterval(seconds),
+                          windows: [QuotaWindow(id: "five_hour", usedPercent: used, minutes: 300, resetsAt: reset)])
+        }
+        let stale = held.merging(report(51, after: 60), at: now)
+        XCTAssertEqual(stale.date, now)
+        XCTAssertEqual(stale.windows.map(\.usedPercent), [52, 37])
+        let fresh = held.merging(report(53, after: 120), at: now)
+        XCTAssertEqual(fresh.date, now.addingTimeInterval(120))
+        XCTAssertEqual(fresh.windows.map(\.usedPercent), [53, 37])
+    }
 }

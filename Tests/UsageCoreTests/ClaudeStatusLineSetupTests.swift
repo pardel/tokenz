@@ -184,4 +184,49 @@ final class ClaudeStatusLineSetupTests: XCTestCase {
         try Setup.remove(configDirectory: config, home: "/Users/nobody-here")
         XCTAssertEqual(try read(settings), "{}\n")
     }
+
+    /// Every session runs the script, and one left idle passes on older limits.
+    func testScriptKeepsTheSavedWindowAgainstOlderReadings() throws {
+        let script = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
+            .deletingLastPathComponent().appendingPathComponent("scripts/\(Setup.scriptName)")
+        let feed = root.appendingPathComponent("feed.json")
+        let start = Date().timeIntervalSince1970.rounded()
+        let reset = start + 3600, week = start + 86400
+        func run(_ limits: [String: Any]?) throws {
+            let process = Process(), input = Pipe()
+            process.executableURL = URL(fileURLWithPath: "/bin/zsh")
+            process.arguments = [script.path]
+            process.environment = ProcessInfo.processInfo.environment.merging(["TOKENZ_FEED": feed.path]) { $1 }
+            process.standardInput = input
+            process.standardOutput = FileHandle.nullDevice
+            try process.run()
+            var payload: [String: Any] = ["model": ["display_name": "Opus"]]
+            payload["rate_limits"] = limits
+            input.fileHandleForWriting.write(try JSONSerialization.data(withJSONObject: payload))
+            try input.fileHandleForWriting.close()
+            process.waitUntilExit()
+            XCTAssertEqual(process.terminationStatus, 0)
+        }
+        func window(_ used: Double, _ resetsAt: Double) -> [String: Any] { ["used_percentage": used, "resets_at": resetsAt] }
+        func saved(_ key: String) throws -> Double? {
+            let object = try JSONSerialization.jsonObject(with: Data(contentsOf: feed)) as? [String: Any]
+            return ((object?["rate_limits"] as? [String: Any])?[key] as? [String: Any])?["used_percentage"] as? Double
+        }
+        func inode() throws -> Int { try FileManager.default.attributesOfItem(atPath: feed.path)[.systemFileNumber] as! Int }
+
+        try run(["five_hour": window(52, reset), "seven_day": window(37, week)])
+        XCTAssertEqual(try saved("five_hour"), 52)
+        XCTAssertEqual(try permissions(feed), 0o600)
+        let written = try inode()
+        try run(["five_hour": window(27, reset), "seven_day": window(30, week)])
+        try run(["five_hour": window(90, start - 60)])
+        try run(nil)
+        XCTAssertEqual(try inode(), written, "older readings leave the file as it was")
+        XCTAssertEqual(try saved("seven_day"), 37)
+        try run(["five_hour": window(53.5, reset)])
+        XCTAssertEqual(try saved("five_hour"), 53.5)
+        XCTAssertEqual(try saved("seven_day"), 37, "a window the session did not report stays")
+        try run(["five_hour": window(4, start + 1800)])
+        XCTAssertEqual(try saved("five_hour"), 4, "another live window: another account, or limits reset early")
+    }
 }
