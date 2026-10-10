@@ -1,0 +1,87 @@
+# XcodeGen spec: `xcodegen generate` produces Tokenz.xcodeproj from this.
+# The Swift package stays the source of truth for UsageCore, the tests and
+# the scripts; this project exists for the Xcode workflow: signing in the
+# GUI, Archive, and Distribute App for Developer ID notarisation.
+name: Tokenz
+options:
+  bundleIdPrefix: dev.pardel
+  deploymentTarget:
+    macOS: "14.0"
+  xcodeVersion: "26.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+configFiles:
+  Debug: Signing.xcconfig
+  Release: Signing.xcconfig
+settings:
+  base:
+    SWIFT_VERSION: "5"
+    CODE_SIGN_STYLE: Automatic
+    ENABLE_HARDENED_RUNTIME: YES
+    MARKETING_VERSION: 0.1.0
+    CURRENT_PROJECT_VERSION: 1
+packages:
+  UsageCore:
+    path: .
+targets:
+  Tokenz:
+    type: application
+    platform: macOS
+    sources:
+      - path: Sources/Tokenz
+      - path: Resources/AppIcon.icns
+        buildPhase: resources
+      # Installed into ~/.claude on request; AppModel finds it through Bundle.main.
+      - path: scripts/tokenz-statusline.sh
+        buildPhase: resources
+    dependencies:
+      - package: UsageCore
+        product: UsageCore
+    info:
+      path: Resources/Info.plist
+      properties:
+        CFBundleName: $(PRODUCT_NAME)
+        CFBundleDisplayName: $(PRODUCT_NAME)
+        CFBundleIdentifier: $(PRODUCT_BUNDLE_IDENTIFIER)
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
+        LSUIElement: true
+        CFBundleIconFile: AppIcon
+        LSApplicationCategoryType: public.app-category.utilities
+        NSHighResolutionCapable: true
+        NSHumanReadableCopyright: "© 2026 Paul Ardeleanu"
+        NSPrincipalClass: NSApplication
+    settings:
+      base:
+        # No sandbox: Tokenz reads ~/.claude and ~/.codex, and writes Claude's
+        # status line only when asked.
+        ENABLE_APP_SANDBOX: NO
+        GENERATE_INFOPLIST_FILE: NO
+        PRODUCT_BUNDLE_IDENTIFIER: dev.pardel.tokenz
+        PRODUCT_NAME: Tokenz
+  UsageCoreTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: Tests/UsageCoreTests
+    dependencies:
+      - package: UsageCore
+        product: UsageCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.pardel.tokenz.tests
+        GENERATE_INFOPLIST_FILE: YES
+schemes:
+  Tokenz:
+    build:
+      targets:
+        Tokenz: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - UsageCoreTests
+    archive:
+      config: Release

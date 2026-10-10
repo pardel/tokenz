@@ -1,0 +1,8 @@
+// Signing is automatic; the team comes from Local.xcconfig, which is
+// gitignored so the generated project never carries anyone's team id:
+//
+//   echo 'DEVELOPMENT_TEAM = XXXXXXXXXX' > Local.xcconfig
+//
+// Without it Xcode builds unsigned; pick a team under Signing & Capabilities
+// and Xcode writes it here for you.
+#include? "Local.xcconfig"

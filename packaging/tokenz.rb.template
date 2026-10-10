@@ -1,0 +1,30 @@
+cask "tokenz" do
+  version "@VERSION@"
+  sha256 "@SHA256@"
+
+  url "https://github.com/pardel/tokenz/releases/download/v#{version}/Tokenz-#{version}.zip"
+  name "Tokenz"
+  desc "Menu bar meter for Claude Code and Codex plan usage and local token totals"
+  homepage "https://github.com/pardel/tokenz"
+
+  depends_on macos: :sonoma
+
+  app "Tokenz.app"
+
+  uninstall quit:       "dev.pardel.tokenz",
+            login_item: "Tokenz"
+
+  # Nothing under ~/.claude: if Tokenz set up Claude's status line, settings.json
+  # still points at its script. Remove it from inside Tokenz first (see caveats).
+  zap trash: "~/Library/Preferences/dev.pardel.tokenz.plist"
+
+  caveats <<~EOS
+    Claude plan percentages need a one-time status-line step: open Tokenz,
+    then Settings > Claude status line > Set up…. If you already have a
+    status line, Tokenz shows the line to add to it.
+
+    Before uninstalling, if Tokenz set up your status line, use
+    Settings > Claude status line > Remove… so Claude Code's settings.json
+    does not point at a deleted script.
+  EOS
+end

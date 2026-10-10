@@ -1,0 +1,516 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1F0E1100E32264F2D5389689 /* tokenz-statusline.sh in Resources */ = {isa = PBXBuildFile; fileRef = FB6073F58C03A52ECAAC79DA /* tokenz-statusline.sh */; };
+		20404DA820EF54E11E7F4E8C /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = B92B434408752906626B600A /* AppIcon.icns */; };
+		57D845DC0CA8388381B6324F /* UsageCore in Frameworks */ = {isa = PBXBuildFile; productRef = 7DD322C7366CE06120D5A2CF /* UsageCore */; };
+		5A1E1415AD2F26817DDC1F9D /* ClaudeStatusLineSetupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA480310F1E305A969DBCB60 /* ClaudeStatusLineSetupTests.swift */; };
+		7BA9F02F9C6A46A7F6107655 /* PanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F676D11A512B1C8561465671 /* PanelView.swift */; };
+		8042D518D3A9B7CACAD82DB2 /* MenuBarLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6074297CD3812AA4BAADD505 /* MenuBarLabel.swift */; };
+		861C46C366B9AF0EE64EFB3C /* UsageActivityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84298AFDB018A0AFE9E6083B /* UsageActivityTests.swift */; };
+		9C2E5C0FC6F5F76C30020450 /* UsageCore in Frameworks */ = {isa = PBXBuildFile; productRef = 37AD9BDE7E2A99A2B756D8D7 /* UsageCore */; };
+		B990510A4C6158F79860E777 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FF788505923457BE2A40864 /* AppModel.swift */; };
+		BB30F219721596BE0D43C4F1 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 649D8B4D14356A2EA7DB63EB /* main.swift */; };
+		E155379CC5041B425B75A69A /* UsageCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 677CB059070ABD041413B8E6 /* UsageCoreTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1FF788505923457BE2A40864 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		5928EA4EC1051E7FED68676C /* Tokenz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tokenz.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6074297CD3812AA4BAADD505 /* MenuBarLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarLabel.swift; sourceTree = "<group>"; };
+		649D8B4D14356A2EA7DB63EB /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		677CB059070ABD041413B8E6 /* UsageCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageCoreTests.swift; sourceTree = "<group>"; };
+		84298AFDB018A0AFE9E6083B /* UsageActivityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageActivityTests.swift; sourceTree = "<group>"; };
+		8895DCAF5D11C925E758BF55 /* UsageCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UsageCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B98A280E51C707649B95306 /* tokenz */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tokenz; path = .; sourceTree = SOURCE_ROOT; };
+		AA480310F1E305A969DBCB60 /* ClaudeStatusLineSetupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeStatusLineSetupTests.swift; sourceTree = "<group>"; };
+		B92B434408752906626B600A /* AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AppIcon.icns; sourceTree = "<group>"; };
+		F676D11A512B1C8561465671 /* PanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanelView.swift; sourceTree = "<group>"; };
+		FB6073F58C03A52ECAAC79DA /* tokenz-statusline.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "tokenz-statusline.sh"; sourceTree = "<group>"; };
+		"TEMP_60B62045-7B34-4031-A4A8-1D3DC2CDA5E6" /* Signing.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Signing.xcconfig; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A0CB50B8516CBCC8E7BFCC6B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				57D845DC0CA8388381B6324F /* UsageCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B7112047E38BF5EB19973A21 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9C2E5C0FC6F5F76C30020450 /* UsageCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		027AD507AB065194B740A15F /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				9B98A280E51C707649B95306 /* tokenz */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		0652A200AE5A298D3B9EAF44 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B92B434408752906626B600A /* AppIcon.icns */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		180861342DB32A96E849368C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5928EA4EC1051E7FED68676C /* Tokenz.app */,
+				8895DCAF5D11C925E758BF55 /* UsageCoreTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		26DE898B50422CB3C41C6D1C /* Tokenz */ = {
+			isa = PBXGroup;
+			children = (
+				1FF788505923457BE2A40864 /* AppModel.swift */,
+				649D8B4D14356A2EA7DB63EB /* main.swift */,
+				6074297CD3812AA4BAADD505 /* MenuBarLabel.swift */,
+				F676D11A512B1C8561465671 /* PanelView.swift */,
+			);
+			path = Tokenz;
+			sourceTree = "<group>";
+		};
+		2C53136B9560CE9E37A9B2A2 /* scripts */ = {
+			isa = PBXGroup;
+			children = (
+				FB6073F58C03A52ECAAC79DA /* tokenz-statusline.sh */,
+			);
+			path = scripts;
+			sourceTree = "<group>";
+		};
+		440F9E3CBFE57C516670A900 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				AC14D95EF6500790B92AA534 /* UsageCoreTests */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		5169CAEED4C966027AFB43FF /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				26DE898B50422CB3C41C6D1C /* Tokenz */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		62714D2EBB0DA802D3D602E7 = {
+			isa = PBXGroup;
+			children = (
+				027AD507AB065194B740A15F /* Packages */,
+				0652A200AE5A298D3B9EAF44 /* Resources */,
+				2C53136B9560CE9E37A9B2A2 /* scripts */,
+				5169CAEED4C966027AFB43FF /* Sources */,
+				440F9E3CBFE57C516670A900 /* Tests */,
+				180861342DB32A96E849368C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AC14D95EF6500790B92AA534 /* UsageCoreTests */ = {
+			isa = PBXGroup;
+			children = (
+				AA480310F1E305A969DBCB60 /* ClaudeStatusLineSetupTests.swift */,
+				84298AFDB018A0AFE9E6083B /* UsageActivityTests.swift */,
+				677CB059070ABD041413B8E6 /* UsageCoreTests.swift */,
+			);
+			path = UsageCoreTests;
+			sourceTree = "<group>";
+		};
+		"TEMP_191432AB-4CE0-4162-A0D4-4AA91120AE75" /* tokenz */ = {
+			isa = PBXGroup;
+			children = (
+				"TEMP_60B62045-7B34-4031-A4A8-1D3DC2CDA5E6" /* Signing.xcconfig */,
+			);
+			path = tokenz;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		39F712873EEF7CDC7E00F2BD /* UsageCoreTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F3C05FE027FA4398F0711CE5 /* Build configuration list for PBXNativeTarget "UsageCoreTests" */;
+			buildPhases = (
+				5709A23F34AB52BBE892BC4E /* Sources */,
+				B7112047E38BF5EB19973A21 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = UsageCoreTests;
+			packageProductDependencies = (
+				37AD9BDE7E2A99A2B756D8D7 /* UsageCore */,
+			);
+			productName = UsageCoreTests;
+			productReference = 8895DCAF5D11C925E758BF55 /* UsageCoreTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		CB6DF47262A7B85E5D41B26D /* Tokenz */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E25783C542207A4C1C013256 /* Build configuration list for PBXNativeTarget "Tokenz" */;
+			buildPhases = (
+				288B3BD73CD1FE096F7A1D41 /* Sources */,
+				DEF8E67CD615F7CA94DFDC6F /* Resources */,
+				A0CB50B8516CBCC8E7BFCC6B /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Tokenz;
+			packageProductDependencies = (
+				7DD322C7366CE06120D5A2CF /* UsageCore */,
+			);
+			productName = Tokenz;
+			productReference = 5928EA4EC1051E7FED68676C /* Tokenz.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		670D2875B35873BB66F98C94 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2600;
+				TargetAttributes = {
+					39F712873EEF7CDC7E00F2BD = {
+						ProvisioningStyle = Automatic;
+					};
+					CB6DF47262A7B85E5D41B26D = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 697BDEBF9EA0834F8F3F4FE3 /* Build configuration list for PBXProject "Tokenz" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 62714D2EBB0DA802D3D602E7;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				5A5C95426DF5D75ADFBCEB4A /* XCLocalSwiftPackageReference "." */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 180861342DB32A96E849368C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CB6DF47262A7B85E5D41B26D /* Tokenz */,
+				39F712873EEF7CDC7E00F2BD /* UsageCoreTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DEF8E67CD615F7CA94DFDC6F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20404DA820EF54E11E7F4E8C /* AppIcon.icns in Resources */,
+				1F0E1100E32264F2D5389689 /* tokenz-statusline.sh in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		288B3BD73CD1FE096F7A1D41 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B990510A4C6158F79860E777 /* AppModel.swift in Sources */,
+				8042D518D3A9B7CACAD82DB2 /* MenuBarLabel.swift in Sources */,
+				7BA9F02F9C6A46A7F6107655 /* PanelView.swift in Sources */,
+				BB30F219721596BE0D43C4F1 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5709A23F34AB52BBE892BC4E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A1E1415AD2F26817DDC1F9D /* ClaudeStatusLineSetupTests.swift in Sources */,
+				861C46C366B9AF0EE64EFB3C /* UsageActivityTests.swift in Sources */,
+				E155379CC5041B425B75A69A /* UsageCoreTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		52DA87B93799A9F1275D5675 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dev.pardel.tokenz.tests;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		9D280D86FB986A05E247D4AD /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = "TEMP_60B62045-7B34-4031-A4A8-1D3DC2CDA5E6" /* Signing.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5;
+			};
+			name = Release;
+		};
+		A4FEA141EA4BE801242551B9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dev.pardel.tokenz;
+				PRODUCT_NAME = Tokenz;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		D94FF731978C1CD4FA81E75B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dev.pardel.tokenz.tests;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		DCC4DD96CF47CB2CC3F337F4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = "TEMP_60B62045-7B34-4031-A4A8-1D3DC2CDA5E6" /* Signing.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5;
+			};
+			name = Debug;
+		};
+		E74A3AAA7B3B479C49BBBB61 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dev.pardel.tokenz;
+				PRODUCT_NAME = Tokenz;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		697BDEBF9EA0834F8F3F4FE3 /* Build configuration list for PBXProject "Tokenz" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DCC4DD96CF47CB2CC3F337F4 /* Debug */,
+				9D280D86FB986A05E247D4AD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		E25783C542207A4C1C013256 /* Build configuration list for PBXNativeTarget "Tokenz" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E74A3AAA7B3B479C49BBBB61 /* Debug */,
+				A4FEA141EA4BE801242551B9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F3C05FE027FA4398F0711CE5 /* Build configuration list for PBXNativeTarget "UsageCoreTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D94FF731978C1CD4FA81E75B /* Debug */,
+				52DA87B93799A9F1275D5675 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		5A5C95426DF5D75ADFBCEB4A /* XCLocalSwiftPackageReference "." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = .;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		37AD9BDE7E2A99A2B756D8D7 /* UsageCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = UsageCore;
+		};
+		7DD322C7366CE06120D5A2CF /* UsageCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = UsageCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 670D2875B35873BB66F98C94 /* Project object */;
+}

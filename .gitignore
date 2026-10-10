@@ -1,0 +1,7 @@
+.build/
+.swiftpm/
+# Tokenz.xcodeproj is generated from project.yml (xcodegen) and committed; regenerate after editing the spec.
+.DS_Store
+dist/
+xcuserdata/
+Local.xcconfig
