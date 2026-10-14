@@ -40,7 +40,8 @@ Actual usage requires local Claude Code or Codex session logs. See the
 ## Project layout
 
 - `Sources/UsageCore/`: parsing, incremental scanning, token accounting,
-  quota windows, and activity aggregation.
+  quota windows, activity aggregation, and the CSV format that Export…
+  writes and the Other Macs folder holds.
 - `Sources/Tokenz/`: the native app, menu bar rendering, panel, and preferences.
 - `Tests/UsageCoreTests/`: accounting, parser, scanner, and calendar tests.
 - `Resources/`: app artwork and bundle metadata.

@@ -20,6 +20,13 @@ enum Preferences {
     static var claudeQuotaPath: String {
         UserDefaults.standard.string(forKey: "claudeQuotaPath") ?? defaultClaudeQuotaPath
     }
+    /// Other Macs' daily totals, one CSV file per Mac. Tokenz only reads it.
+    static var defaultOtherMacsPath: String { "\(home)/Library/Application Support/Tokenz/Other Macs" }
+    static var otherMacsPath: String {
+        UserDefaults.standard.string(forKey: "otherMacsPath") ?? defaultOtherMacsPath
+    }
+    /// This Mac's name: what Export… suggests, and the file in Other Macs that is never counted twice.
+    static var thisMac: String? { Host.current().localizedName }
 }
 
 @MainActor
@@ -35,6 +42,7 @@ final class AppModel: ObservableObject {
     @Published var launchAtLogin: Bool = SMAppService.mainApp.status == .enabled
     @Published var paths: [Provider: String]
     @Published var claudeQuotaPath: String
+    @Published var otherMacsPath: String
     @Published var statusLineState: ClaudeStatusLineSetup.State = .available
     @Published var statusLineNote: String?
     /// The status-line script Tokenz offers to install, bundled by `scripts/build.sh`.
@@ -52,6 +60,7 @@ final class AppModel: ObservableObject {
         paths = Preferences.paths
         showMenuPercentages = UserDefaults.standard.object(forKey: "showMenuPercentages") as? Bool ?? true
         claudeQuotaPath = Preferences.claudeQuotaPath
+        otherMacsPath = Preferences.otherMacsPath
         refreshStatusLineState()
     }
     func start() {
@@ -91,14 +100,18 @@ final class AppModel: ObservableObject {
         refreshStatusLineState()
         let roots = paths
         let quotaPath = claudeQuotaPath
+        let othersPath = otherMacsPath
+        let thisMac = Set([Preferences.thisMac].compactMap { $0 })
         queue.async { [scanner, weak self] in
-            let result = scanner.scan(paths: roots, claudeQuotaPath: quotaPath)
+            let result = scanner.scan(paths: roots, claudeQuotaPath: quotaPath, otherMacsPath: othersPath, thisMac: thisMac)
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
                 self.snapshot = result
                 self.refreshing = false
                 self.onUpdate?()
-                if self.paths != roots || self.claudeQuotaPath != quotaPath { self.refresh() }
+                if self.paths != roots || self.claudeQuotaPath != quotaPath || self.otherMacsPath != othersPath {
+                    self.refresh()
+                }
             }
         }
     }
@@ -131,9 +144,26 @@ final class AppModel: ObservableObject {
             refresh()
         }
     }
+    func chooseOtherMacsFolder() {
+        let panel = NSOpenPanel()
+        panel.title = "Choose the Other Macs folder"
+        panel.message = "Select the folder holding other Macs' exported CSV files, one per Mac, named after it."
+        panel.canChooseDirectories = true; panel.canChooseFiles = false; panel.showsHiddenFiles = true
+        panel.canCreateDirectories = true
+        panel.directoryURL = URL(fileURLWithPath: otherMacsPath)
+        NSApp.activate(ignoringOtherApps: true)
+        if panel.runModal() == .OK, let url = panel.url {
+            otherMacsPath = url.path
+            UserDefaults.standard.set(url.path, forKey: "otherMacsPath")
+            refresh()
+        }
+    }
     func restoreFolders() {
         paths = Preferences.defaultPaths
-        for provider in Provider.allCases { UserDefaults.standard.removeObject(forKey: "\(provider.rawValue)Path") }
+        otherMacsPath = Preferences.defaultOtherMacsPath
+        for key in Provider.allCases.map({ "\($0.rawValue)Path" }) + ["otherMacsPath"] {
+            UserDefaults.standard.removeObject(forKey: key)
+        }
         refresh()
     }
     // MARK: Claude status line
@@ -245,21 +275,12 @@ final class AppModel: ObservableObject {
     func exportCSV() {
         guard let snapshot else { return }
         let panel = NSSavePanel()
-        panel.nameFieldStringValue = "tokenz-usage.csv"
+        // Named after this Mac, as another Mac's Other Macs folder expects.
+        panel.nameFieldStringValue = "\(Preferences.thisMac ?? "tokenz-usage").csv"
         panel.allowedContentTypes = [.commaSeparatedText]
         NSApp.activate(ignoringOtherApps: true)
         guard panel.runModal() == .OK, let url = panel.url else { return }
-        let calendar = Calendar.current
-        let formatter = DateFormatter(); formatter.dateFormat = "yyyy-MM-dd"
-        var lines = ["date,provider,input_tokens,output_tokens,cache_read_tokens,cache_write_tokens,total_tokens"]
-        for provider in snapshot.providers {
-            let days = Dictionary(grouping: provider.records) { calendar.startOfDay(for: $0.date) }
-            for day in days.keys.sorted() {
-                let tokens = days[day]!.reduce(Tokens()) { $0 + $1.tokens }
-                lines.append("\(formatter.string(from: day)),\(provider.provider.rawValue),\(tokens.input),\(tokens.output),\(tokens.cached),\(tokens.cacheWrite),\(tokens.total)")
-            }
-        }
-        do { try (lines.joined(separator: "\n") + "\n").write(to: url, atomically: true, encoding: .utf8) }
+        do { try UsageCSV.export(snapshot.providers).write(to: url, atomically: true, encoding: .utf8) }
         catch { message = "Could not save CSV: \(error.localizedDescription)" }
     }
 }

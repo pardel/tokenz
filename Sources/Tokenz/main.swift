@@ -104,7 +104,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate {
 
 if CommandLine.arguments.contains("--diagnose") {
     // Same folders and feed as the app, including choices saved in Settings.
-    let snapshot = UsageScanner().scan(paths: Preferences.paths, claudeQuotaPath: Preferences.claudeQuotaPath)
+    let snapshot = UsageScanner().scan(paths: Preferences.paths, claudeQuotaPath: Preferences.claudeQuotaPath,
+                                       otherMacsPath: Preferences.otherMacsPath,
+                                       thisMac: Set([Preferences.thisMac].compactMap { $0 }))
     let today = Calendar.current.startOfDay(for: Date())
     for usage in snapshot.providers {
         let tokens = usage.tokens(since: today)
@@ -113,6 +115,14 @@ if CommandLine.arguments.contains("--diagnose") {
         if let quota = usage.quota {
             for window in quota.windows { print("  \(window.label): \(window.usedPercent)% used, recorded \(quota.date)") }
         }
+    }
+    if let others = snapshot.otherMacs {
+        print("Other Macs: \(others.path)")
+        for machine in others.machines {
+            let tokens = machine.tokens(since: today, until: Date())
+            print("  \(machine.name), as of \(machine.asOf): today \(tokens.total) tokens (input \(tokens.input), output \(tokens.output), cached \(tokens.cached), cache write \(tokens.cacheWrite))")
+        }
+        for issue in others.issues { print("  \(issue)") }
     }
 } else {
     MainActor.assumeIsolated {

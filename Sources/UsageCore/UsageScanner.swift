@@ -7,7 +7,8 @@ public final class UsageScanner: @unchecked Sendable {
     private var claudeQuota: QuotaSnapshot?
     private var quotaPath: String?
     public init() {}
-    public func scan(paths: [Provider: String], claudeQuotaPath: String? = nil, now: Date = Date()) -> UsageSnapshot {
+    public func scan(paths: [Provider: String], claudeQuotaPath: String? = nil, otherMacsPath: String? = nil,
+                     thisMac: Set<String> = [], now: Date = Date()) -> UsageSnapshot {
         lock.lock()
         defer { lock.unlock() }
         let calendar = Calendar.current
@@ -73,7 +74,8 @@ public final class UsageScanner: @unchecked Sendable {
             return result
         }
         cache = cache.filter { activePaths.contains($0.key) }
-        return UsageSnapshot(providers: providers, refreshedAt: now)
+        return UsageSnapshot(providers: providers, refreshedAt: now,
+                             otherMacs: otherMacsPath.map { OtherMacsReader.read(folder: $0, thisMac: thisMac) })
     }
 
     /// Re-reads only the Claude feed, which changes with every status line, between full scans.

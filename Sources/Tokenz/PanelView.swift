@@ -21,6 +21,8 @@ struct PanelView: View {
     private var panelHeight: CGFloat {
         min(700, max(360, (NSScreen.main?.visibleFrame.height ?? 900) - 80))
     }
+    /// Other Macs, when their folder holds anything to show or to warn about.
+    private var others: OtherMacs? { model.snapshot?.otherMacs.flatMap { $0.isEmpty ? nil : $0 } }
     var body: some View {
         ScrollView {
         VStack(alignment: .leading, spacing: 16) {
@@ -53,18 +55,27 @@ struct PanelView: View {
                     let now = Date()
                     let start = model.period.start(at: now)
                     let total = snapshot.providers.reduce(Int64(0)) { $0 + $1.tokens(since: start, until: now).total }
-                    HStack(alignment: .firstTextBaseline) {
-                        Text(TokenFormat.compact(total)).font(Theme.number).monospacedDigit()
-                            .help("\(total.formatted()) tokens")
-                        Text("tokens").foregroundStyle(Theme.muted)
-                        Spacer()
-                        Text("LOCAL USAGE").font(.system(size: 9, weight: .semibold)).foregroundStyle(Theme.muted)
+                    VStack(alignment: .leading, spacing: 2) {
+                        HStack(alignment: .firstTextBaseline) {
+                            Text(TokenFormat.compact(total)).font(Theme.number).monospacedDigit()
+                                .help("\(total.formatted()) tokens")
+                            Text("tokens").foregroundStyle(Theme.muted)
+                            Spacer()
+                            Text(others == nil ? "LOCAL USAGE" : "THIS MAC")
+                                .font(.system(size: 9, weight: .semibold)).foregroundStyle(Theme.muted)
+                        }
+                        if let others, !others.machines.isEmpty {
+                            let all = others.machines.reduce(total) { $0 + $1.tokens(since: start, until: now).total }
+                            Text("\(TokenFormat.compact(all)) tokens on all Macs").foregroundStyle(Theme.muted)
+                                .help("\(all.formatted()) tokens: this Mac and \(others.machines.map(\.name).joined(separator: ", "))")
+                        }
                     }
                     ActivityView(providers: snapshot.providers, period: model.period, now: now)
                     ForEach(snapshot.providers, id: \.provider) { usage in
                         ProviderView(usage: usage, start: start, now: now, feedExists: model.claudeFeedExists,
                                      onSetUp: { model.settingsVisible = true })
                     }
+                    if let others { OtherMacsView(others: others, start: start, now: now) }
                     HStack {
                         Text("Updated \(snapshot.refreshedAt.formatted(date: .omitted, time: .shortened)) · every 5 min")
                             .font(Theme.label).foregroundStyle(Theme.muted)
@@ -83,7 +94,8 @@ struct PanelView: View {
                         .frame(maxWidth: .infinity)
                         .frame(height: max(160, panelHeight - 200))
                 }
-                Text("Tokens recorded on this Mac. Cached input is included. Subscription allowances are separate.")
+                Text(others == nil ? "Tokens recorded on this Mac. Cached input is included. Subscription allowances are separate."
+                     : "Tokens recorded on this Mac; other Macs' saved daily totals are in their own card. Cached input is included. Subscription allowances are separate.")
                     .font(Theme.label).foregroundStyle(Theme.muted).fixedSize(horizontal: false, vertical: true)
             }
             if let message = model.message {
@@ -161,6 +173,49 @@ struct ProviderView: View {
             Text(label).font(.system(size: 10)).foregroundStyle(Theme.muted)
             Text(TokenFormat.compact(value)).monospacedDigit().help(value.formatted())
         }.frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+/// Other Macs' saved daily totals, each with the time its file last changed.
+struct OtherMacsView: View {
+    let others: OtherMacs
+    let start: Date
+    let now: Date
+    var body: some View {
+        let total = others.machines.reduce(Tokens()) { $0 + $1.tokens(since: start, until: now) }
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Image(systemName: "desktopcomputer").foregroundStyle(Theme.muted)
+                Text("Other Macs").font(.system(size: 13, weight: .semibold))
+                Spacer()
+                Text(others.machines.isEmpty ? "—" : TokenFormat.compact(total.total))
+                    .font(.system(size: 18, weight: .semibold, design: .rounded)).monospacedDigit()
+                    .help("\(total.total.formatted()) tokens")
+            }
+            ForEach(others.machines, id: \.name) { machine in
+                let tokens = machine.tokens(since: start, until: now)
+                VStack(alignment: .leading, spacing: 3) {
+                    HStack {
+                        Text(machine.name).font(.system(size: 12, weight: .medium))
+                        Spacer()
+                        Text(TokenFormat.compact(tokens.total)).monospacedDigit().help("\(tokens.total.formatted()) tokens")
+                    }
+                    Text(detail(machine)).font(Theme.label).foregroundStyle(Theme.muted)
+                }
+            }
+            ForEach(others.issues, id: \.self) { issue in
+                Label(issue, systemImage: "exclamationmark.triangle").font(Theme.label)
+                    .foregroundStyle(Theme.muted).fixedSize(horizontal: false, vertical: true)
+            }
+        }.padding(14).background(Theme.surface, in: RoundedRectangle(cornerRadius: 10))
+    }
+    private func detail(_ machine: MachineUsage) -> String {
+        let sameDay = Calendar.current.isDate(machine.asOf, inSameDayAs: now)
+        let asOf = machine.asOf.formatted(date: sameDay ? .omitted : .abbreviated, time: .shortened)
+        let providers = Provider.allCases.map { provider in
+            "\(provider == .claude ? "Claude" : "Codex") \(TokenFormat.compact(machine.tokens(provider, since: start, until: now).total))"
+        }
+        return (["As of \(asOf)"] + providers).joined(separator: " · ")
     }
 }
 
@@ -281,6 +336,18 @@ struct SettingsView: View {
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
+            VStack(alignment: .leading, spacing: 6) {
+                HStack {
+                    Text("Other Macs").font(.system(size: 12, weight: .medium))
+                    Spacer()
+                    Button("Choose…") { model.chooseOtherMacsFolder() }
+                }
+                Text(model.otherMacsPath).font(.system(size: 10, design: .monospaced))
+                    .foregroundStyle(Theme.muted).textSelection(.enabled)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text("Tokenz adds the daily totals in each CSV file here, one per Mac and named after it, in the format Export… writes. A file named after this Mac is skipped.")
+                    .font(Theme.label).foregroundStyle(Theme.muted).fixedSize(horizontal: false, vertical: true)
+            }
             Button("Restore default folders") { model.restoreFolders() }
             VStack(alignment: .leading, spacing: 6) {
                 HStack {
@@ -295,7 +362,7 @@ struct SettingsView: View {
             statusLineSection
             Divider()
             Text("About the counters").font(.system(size: 13, weight: .semibold))
-            Text("Token usage comes from local session logs, including agent sessions. Today uses your Mac’s timezone; 7 and 30 days include today and the previous 6 or 29 days.")
+            Text("Token usage comes from local session logs, including agent sessions. Today uses your Mac’s timezone; 7 and 30 days include today and the previous 6 or 29 days. Other Macs add the days saved in their files, as of each file’s last change; the chart shows this Mac only.")
             Text("Input includes cached tokens. Claude cache writes are included in input. Codex reasoning tokens are already included in output.")
             Text("The menu bar shows a 5-hour percentage beside each provider symbol and a weekly usage underline below. The percentage is hidden when unavailable, expired, or rounded to zero. Each is green below 70%, orange from 70% to under 90%, and red at 90% or above. Each symbol follows the weekly underline colour and remains neutral when weekly usage is unavailable. A dotted underline means no current weekly reading. Hover for exact values and reset times. A provider appears when its desktop app is installed or its session logs or plan feed exist. Codex reports limits in its logs; Claude reports them through its status line.")
             HStack {

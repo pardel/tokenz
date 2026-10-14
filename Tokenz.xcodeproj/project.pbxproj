@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1F0E1100E32264F2D5389689 /* tokenz-statusline.sh in Resources */ = {isa = PBXBuildFile; fileRef = FB6073F58C03A52ECAAC79DA /* tokenz-statusline.sh */; };
 		20404DA820EF54E11E7F4E8C /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = B92B434408752906626B600A /* AppIcon.icns */; };
+		2A6788548F80CCED8799CAE8 /* OtherMacsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B11C74A863B77B5AA06A1D4 /* OtherMacsTests.swift */; };
 		57D845DC0CA8388381B6324F /* UsageCore in Frameworks */ = {isa = PBXBuildFile; productRef = 7DD322C7366CE06120D5A2CF /* UsageCore */; };
 		5A1E1415AD2F26817DDC1F9D /* ClaudeStatusLineSetupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA480310F1E305A969DBCB60 /* ClaudeStatusLineSetupTests.swift */; };
 		7BA9F02F9C6A46A7F6107655 /* PanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F676D11A512B1C8561465671 /* PanelView.swift */; };
@@ -23,6 +24,7 @@
 /* Begin PBXFileReference section */
 		1FF788505923457BE2A40864 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
 		5928EA4EC1051E7FED68676C /* Tokenz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tokenz.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B11C74A863B77B5AA06A1D4 /* OtherMacsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherMacsTests.swift; sourceTree = "<group>"; };
 		6074297CD3812AA4BAADD505 /* MenuBarLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarLabel.swift; sourceTree = "<group>"; };
 		649D8B4D14356A2EA7DB63EB /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		677CB059070ABD041413B8E6 /* UsageCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageCoreTests.swift; sourceTree = "<group>"; };
@@ -132,6 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				AA480310F1E305A969DBCB60 /* ClaudeStatusLineSetupTests.swift */,
+				5B11C74A863B77B5AA06A1D4 /* OtherMacsTests.swift */,
 				84298AFDB018A0AFE9E6083B /* UsageActivityTests.swift */,
 				677CB059070ABD041413B8E6 /* UsageCoreTests.swift */,
 			);
@@ -257,6 +260,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A1E1415AD2F26817DDC1F9D /* ClaudeStatusLineSetupTests.swift in Sources */,
+				2A6788548F80CCED8799CAE8 /* OtherMacsTests.swift in Sources */,
 				861C46C366B9AF0EE64EFB3C /* UsageActivityTests.swift in Sources */,
 				E155379CC5041B425B75A69A /* UsageCoreTests.swift in Sources */,
 			);

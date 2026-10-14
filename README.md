@@ -95,13 +95,23 @@ A provider appears when its desktop app (Claude, or ChatGPT/Codex) is installed,
 
 <p align="center"><img src="docs/assets/panel-expired.png" width="390" alt="Claude Code's 5-hour limit after its reset time has passed: Awaiting update, then Reset time passed; use Claude Code to update. The weekly limit still shows 41% used."></p>
 
-Token totals are locally observed usage, not a billing statement. claude.ai chats, sessions on other machines, cloud-only Codex sessions and logs either tool has already deleted are outside the counters. Plan percentages are the providers' own account limits and are separate from local totals. If you use custom configuration folders, choose the matching `projects` or `sessions` folder in Settings. Archived Codex logs outside `sessions` are counted only if you choose a parent folder containing both.
+Token totals are locally observed usage, not a billing statement. claude.ai chats, cloud-only Codex sessions and logs either tool has already deleted are outside the counters, and so are sessions on other machines unless their totals are in the [Other Macs](#other-macs) folder. Plan percentages are the providers' own account limits and are separate from local totals. If you use custom configuration folders, choose the matching `projects` or `sessions` folder in Settings. Archived Codex logs outside `sessions` are counted only if you choose a parent folder containing both.
 
 The parser counts each Claude message once across content blocks and copied transcripts, derives Codex increments from cumulative counters, and skips copied Codex history by its original timestamp and counters. The first record of a resumed or forked Codex log uses `last_token_usage`, so inherited history is not counted again. The log formats are internal to each tool and may change; records Tokenz does not recognise are ignored.
 
+## Other Macs
+
+Tokenz can add your other Macs' token totals to this Mac's. It reads every CSV file in `~/Library/Application Support/Tokenz/Other Macs`, or a folder you choose in Settings: one file per Mac, named after it, in the format **Export…** writes. Export… suggests the Mac's name.
+
+- The panel shows this Mac's total with the total on all Macs beneath it, and an Other Macs card with each Mac's totals and the time its file last changed. The figures are as of then.
+- Other Macs' totals are daily, so the chart and the Claude Code and Codex cards stay this Mac's.
+- A file named after this Mac is skipped, since its own logs are already counted.
+- A file that is not entirely in that format is left out and named in the card, never counted in part.
+- Tokenz only reads the folder. Getting the files there is up to you: an export from each Mac, a synced folder, or a scheduled script.
+
 ## Privacy and performance
 
-Tokenz reads the session folders, the Claude percentage file and Claude's `settings.json`. Apart from a CSV you export, it writes nothing unless you ask it to set up the status line, and then only its script and `settings.json`, which it backs up first. It never reads authentication files, sends network requests or stores conversation content; `scripts/test.sh` fails if networking code appears. Usage numbers are held in memory. The first scan reads recent files; later scans read only appended lines, **every five minutes** and on wake, on opening the panel or on refresh. An unfinished line waits until its writer completes it. Missing or unreadable folders are shown as such. Preferences live in standard macOS user defaults. CSV export contains only daily token totals.
+Tokenz reads the session folders, the Claude percentage file, Claude's `settings.json` and the Other Macs folder. Apart from a CSV you export, it writes nothing unless you ask it to set up the status line, and then only its script and `settings.json`, which it backs up first. It never reads authentication files, sends network requests or stores conversation content; `scripts/test.sh` fails if networking code appears. Usage numbers are held in memory. The first scan reads recent files; later scans read only appended lines, **every five minutes** and on wake, on opening the panel or on refresh. An unfinished line waits until its writer completes it. Missing or unreadable folders are shown as such. Preferences live in standard macOS user defaults. CSV export contains only daily token totals.
 
 <p align="center"><img src="docs/assets/panel-loading.png" width="390" alt="The panel during the first scan: a spinner over Reading local sessions… and The first scan can take a moment."></p>
 

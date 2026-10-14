@@ -6,6 +6,16 @@ bump for new features, a patch bump for fixes. `MARKETING_VERSION` and
 number. `scripts/release.sh` takes a version's release notes from its
 section here.
 
+## Unreleased
+
+- Other Macs: Tokenz adds the daily totals in a folder of CSV files, one per
+  Mac in the format Export… writes, and shows the total on all Macs and
+  each Mac's figures with the time its file last changed.
+- Claude readings: an idle session can no longer set a reading back, and
+  Tokenz rereads the percentage file every 10 seconds.
+- Export… suggests the Mac's name for the file, and writes Gregorian dates
+  whatever the Mac's calendar.
+
 ## 0.1.0 · 2026-10-10
 
 First public release.

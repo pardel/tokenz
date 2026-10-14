@@ -101,8 +101,10 @@ public struct ProviderUsage: Sendable {
 public struct UsageSnapshot: Sendable {
     public var providers: [ProviderUsage]
     public var refreshedAt: Date
-    public init(providers: [ProviderUsage], refreshedAt: Date) {
-        self.providers = providers; self.refreshedAt = refreshedAt
+    /// Other Macs' saved daily totals; nil when the scan was given no folder.
+    public var otherMacs: OtherMacs?
+    public init(providers: [ProviderUsage], refreshedAt: Date, otherMacs: OtherMacs? = nil) {
+        self.providers = providers; self.refreshedAt = refreshedAt; self.otherMacs = otherMacs
     }
 }
 
