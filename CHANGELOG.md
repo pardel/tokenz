@@ -6,13 +6,18 @@ bump for new features, a patch bump for fixes. `MARKETING_VERSION` and
 number. `scripts/release.sh` takes a version's release notes from its
 section here.
 
-## Unreleased
+## 0.2.0 · 2026-10-14
 
 - Other Macs: Tokenz adds the daily totals in a folder of CSV files, one per
   Mac in the format Export… writes, and shows the total on all Macs and
   each Mac's figures with the time its file last changed.
 - Claude readings: an idle session can no longer set a reading back, and
   Tokenz rereads the percentage file every 10 seconds.
+- Status line set up under 0.1.0: its script still lets an idle session
+  save a lower figure, which Tokenz now ignores while it runs. To replace
+  it, choose Remove…, then Set up…, in Settings, or, if your own status line
+  passes its input to Tokenz, copy the new `scripts/tokenz-statusline.sh`
+  over `~/.claude/tokenz-statusline.sh`.
 - Export… suggests the Mac's name for the file, and writes Gregorian dates
   whatever the Mac's calendar.
 
